@@ -1,16 +1,29 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -O0
-TARGET = hw2_mmap_faults
+USER_TARGETS = hw2_mmap_faults hw2_page_reclamation hw3-6meminfo
 
-all: $(TARGET)
+all: user_programs
 
-$(TARGET): hw2_mmap_faults.c
-	$(CC) $(CFLAGS) hw2_mmap_faults.c -o $(TARGET)
+user_programs: $(USER_TARGETS)
 
-run: all
-	./$(TARGET) 4096 1
+hw2_mmap_faults: hw2_mmap_faults.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+# -lpthread is required here for multithreading
+hw2_page_reclamation: hw2_page_reclamation.c
+	$(CC) $(CFLAGS) -o $@ $^ -lpthread
+
+hw3-6meminfo: hw3-6meminfo.c
+	$(CC) $(CFLAGS) -o $@ $^
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(USER_TARGETS) *.o *.zip
 
-.PHONY: all run clean
+zip: clean
+	zip -r hw2_submission.zip . -x "*.git*" "*.DS_Store"
+
+run: all
+	./hw2_mmap_faults 4096 1
+	./hw2_page_reclamation 64 20
+
+.PHONY: all user_programs clean zip run
