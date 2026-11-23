@@ -16,6 +16,8 @@ hw2_page_reclamation: hw2_page_reclamation.c
 hw3-6meminfo: hw3-6meminfo.c
 	$(CC) $(CFLAGS) -o $@ $^
 
+
+
 clean:
 	rm -f $(USER_TARGETS) *.o *.zip
 
@@ -25,5 +27,6 @@ zip: clean
 run: all
 	./hw2_mmap_faults 4096 1
 	./hw2_page_reclamation 64 20
-
+	./hw3-6meminfo 10
+   
 .PHONY: all user_programs clean zip run
